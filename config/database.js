@@ -24,3 +24,4 @@ require('../models/Vehicule');
 require('../models/Trajet');
 require('../models/Reservation');
 require('../models/Note');
+require('../models/Declaration');
