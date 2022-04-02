@@ -19,6 +19,31 @@ const createDeclaration = (req, res) => {
     })
 }
 
+const getDeclarations = (req, res) => {
+    const userId = req.user;
+    Declaration.find({ userId }, (err, doc) => {
+        if (!err) {
+            res.status(200).send(doc);
+        } else {
+            console.log(err);
+            res.status(500).send({"Error": "Internal Server Error"})
+        }
+    })
+}
+
+const getDeclaration = (req, res) => {
+    const userId = req.user;
+    const declarationId = req.params.id;
+    Declaration.findOne({ _id: declarationId, userId }, (err, doc) => {
+        if (!err) {
+            res.status(200).send(doc);
+        } else {
+            console.log(err);
+            res.status(500).send({"Error": "Internal Server Error"})
+        }
+    })
+}
+
 const deleteDeclaration = (req, res) => {
     const userId = req.user;
     const declarationId = req.params.id;
@@ -35,4 +60,6 @@ const deleteDeclaration = (req, res) => {
 module.exports = {
     createDeclaration,
     deleteDeclaration,
+    getDeclarations,
+    getDeclaration
 }
