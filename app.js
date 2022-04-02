@@ -1,5 +1,5 @@
 require("dotenv").config();
-require("./models/database").connect();
+require("./config/database").connect();
 const express = require("express");
 const cors = require('cors');
 const helmet = require('helmet');

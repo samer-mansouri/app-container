@@ -19,4 +19,8 @@ exports.connect = () => {
     });
 };
 
-require('./User');
+require('../models/User');
+require('../models/Vehicule');
+require('../models/Trajet');
+require('../models/Reservation');
+require('../models/Note');

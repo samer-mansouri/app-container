@@ -9,16 +9,18 @@ const { validateUser, initializeUser } = require('../helpers/UserHelpers')
 
 
 let createUser = async (req, res) =>{
-    
+    console.log(req.body)
     const { error } = validateUser(
       {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
-        password: req.body.password
+        password: req.body.password,
       }
     );
     if(error){
+      console.log(here)
+      console.log(error)
       //console.log(error);
       //console.log(error.message)
       res.status(400).send({"Error" : error.message})
@@ -29,11 +31,21 @@ let createUser = async (req, res) =>{
       } else {
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(req.body.password, salt);
-        initializeUser(req.body.firstName, req.body.lastName,req.body.email, hash)
+        initializeUser(
+          req.body.firstName,
+           req.body.lastName,
+           req.body.dateOfBirth,
+           req.body.picture,
+           req.body.address,
+           req.body.phoneNumber,           
+           req.body.email,
+           req.body.permis,
+           hash)
         .save((err, doc) => {
           if(!err){
             res.status(201).send({'message': 'User created with success !'});
           } else {
+            console.log(err);
             res.status(500).send({"Error": "Internal Server Error"})
           }
         });
@@ -59,6 +71,7 @@ const handleLogin = async (req, res) => {
             {
                 "UserInfo": {
                     "email": foundUser.email,
+                    "user_id": foundUser._id,
                 }
             },
             process.env.ACCESS_TOKEN_SECRET,
@@ -122,9 +135,10 @@ const handleRefreshToken = async (req, res) => {
           if (err || foundUser.email !== decoded.email) return res.sendStatus(403);
           const accessToken = jwt.sign(
               {
-                  "UserInfo": {
-                      "username": decoded.username,
-                  }
+                "UserInfo": {
+                  "email": foundUser.email,
+                  "user_id": foundUser._id,
+                }
               },
               process.env.ACCESS_TOKEN_SECRET,
               { expiresIn: '180s' }
@@ -135,11 +149,10 @@ const handleRefreshToken = async (req, res) => {
 }
 
 
-
   
-  module.exports = {
-    createUser,
-    handleLogin,
-    handleLogout,
-    handleRefreshToken
-  };
+module.exports = {
+  createUser,
+  handleLogin,
+  handleLogout,
+  handleRefreshToken
+};

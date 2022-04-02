@@ -8,7 +8,9 @@ const port = process.env.PORT || API_PORT;
 // server listening 
 
 const UserRoutes = require('./routes/UserRoutes');
-
+const VehiculeRoutes = require('./routes/VehiculeRoutes');
+const ReservationRoutes = require('./routes/ReservationRoutes');
+const TrajetRoutes = require('./routes/TrajetRoutes');
 
 
 server.listen(port, () => {
@@ -16,3 +18,6 @@ server.listen(port, () => {
 });
 
 app.use('/',  UserRoutes.router);
+app.use('/',  VehiculeRoutes.router);
+app.use('/',  ReservationRoutes.router);
+app.use('/',  TrajetRoutes.router);
