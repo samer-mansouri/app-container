@@ -85,10 +85,8 @@ const handleLogin = async (req, res) => {
         // Saving refreshToken with current user
         foundUser.refreshToken = refreshToken;
         const result = await foundUser.save();
-        console.log(result);
 
-        res.cookie('refreshToken', refreshToken, { httpOnly: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 }); //secure: true, 
-        res.json({ accessToken });
+        res.json({ refreshToken, accessToken });
     } else {
         res.sendStatus(401);
     }
@@ -99,14 +97,12 @@ const handleLogin = async (req, res) => {
 const handleLogout = async (req, res) => {
   // On client, also delete the accessToken
 
-  const cookies = req.cookies;
-  if (!cookies?.refreshToken) return res.sendStatus(204); //No content
-  const refreshToken = cookies.jwt;
+  const refreshToken = req.body.refreshToken;
+  if (!refreshToken) return res.sendStatus(204); //No content
 
   // Is refreshToken in db?
   const foundUser = await User.findOne({ refreshToken }).exec();
   if (!foundUser) {
-      res.clearCookie('refreshToken', { httpOnly: true, sameSite: 'None', secure: true });
       return res.sendStatus(204);
   }
 
@@ -115,16 +111,13 @@ const handleLogout = async (req, res) => {
   const result = await foundUser.save();
   console.log(result);
 
-  res.clearCookie('refreshToken', { httpOnly: true, sameSite: 'None', secure: true });
   res.sendStatus(204);
 }
 
 const handleRefreshToken = async (req, res) => {
   
-  const cookies = req.headers.cookie.split("=")[1];
-  console.log(req.headers.cookie.split("=")[1])
-  if (!cookies) return res.sendStatus(401);
-  const refreshToken = cookies;
+  const refreshToken = req.body.refreshToken;
+  if (!refreshToken) return res.sendStatus(401);
   const foundUser = await User.findOne({ refreshToken }).exec();
   if (!foundUser) return res.sendStatus(403); //Forbidden 
   // evaluate jwt 
