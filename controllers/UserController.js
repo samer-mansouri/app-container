@@ -40,6 +40,7 @@ let createUser = async (req, res) =>{
            req.body.phoneNumber,           
            req.body.email,
            req.body.permis,
+           req.body.gender,
            hash)
         .save((err, doc) => {
           if(!err){

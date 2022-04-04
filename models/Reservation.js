@@ -19,6 +19,7 @@ const ReservationSchema = new mongoose.Schema({
   status : {
     type: String,
     enum: Object.values(Status),
+    required:true
   },
 });
 

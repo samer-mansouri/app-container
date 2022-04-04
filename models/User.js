@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 var timestamps = require('mongoose-timestamp');
 
+const Gender = Object.freeze({
+  Male: 'Male',
+  Female: 'Female',
+});
+
+
 const UserSchema = new mongoose.Schema({
   firstName : {
     type: String,
@@ -43,6 +49,10 @@ const UserSchema = new mongoose.Schema({
   permis: {
     type: String,
     required: 'This field is required',
+  },
+  gender : {
+    type: String,
+    enum: Object.values(Gender),
   },
   password : {
     type: String,

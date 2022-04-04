@@ -1,17 +1,19 @@
 const mongoose = require('mongoose');
 const Trajet = mongoose.model('Trajet');
+const User = mongoose.model('User');
 const { initializeTrajet } = require('../helpers/TrajetHelpers');
 
 const getAllTrajets = (req, res) => {
-    Trajet.find({}, (err, doc) => {
-        if (!err) {
-            res.status(200).send(doc);
+    Trajet.find({}).populate("user", "firstName lastName picture").exec((err, docs) => {
+        if(!err){
+            res.status(200).send(docs);
         } else {
             console.log(err);
             res.status(500).send({"Error": "Internal Server Error"})
         }
     })
 }
+
 
 getAllTrajetsWithPagination = (req, res) => {
     const { page, limit } = req.query;

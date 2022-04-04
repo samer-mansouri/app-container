@@ -51,6 +51,13 @@ const TrajetSchema = new mongoose.Schema({
       required: 'This field is required'
   }
 });
+TrajetSchema.set('toJSON', { virtuals: true })
+
+TrajetSchema.virtual("user", {
+  ref: "User",
+  foreignField: "_id",
+  localField: "userId"
+});
 
 TrajetSchema.plugin(timestamps);
 mongoose.model("Trajet", TrajetSchema)
