@@ -67,5 +67,13 @@ const UserSchema = new mongoose.Schema({
   refreshToken: String,
 });
 
+UserSchema.set('toJSON', { virtuals: true })
+
+UserSchema.virtual("garage", {
+  ref: "Vehicule",
+  foreignField: "userId",
+  localField: "_id"
+});
+
 UserSchema.plugin(timestamps);
 mongoose.model("User", UserSchema)

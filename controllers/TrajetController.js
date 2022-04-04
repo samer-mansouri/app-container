@@ -4,7 +4,7 @@ const User = mongoose.model('User');
 const { initializeTrajet } = require('../helpers/TrajetHelpers');
 
 const getAllTrajets = (req, res) => {
-    Trajet.find({}).populate("user", "firstName lastName picture").exec((err, docs) => {
+    Trajet.find({}).populate("user", "firstName lastName picture").sort('-createdAt').exec((err, docs) => {
         if(!err){
             res.status(200).send(docs);
         } else {
@@ -48,7 +48,7 @@ const trajetsSimpleSearch = (req, res) => {
         placeOfDeparture: placeOfDeparture,
         placeOfDestination: placeOfDestination,
         departureTime: departureTime,
-    }, (err, doc) => {
+    }).populate("user", "firstName lastName picture").sort('-createdAt').exec((err, doc) => {
         if (!err) {
             res.status(200).send(doc);
         } else {

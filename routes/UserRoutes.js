@@ -4,7 +4,10 @@ const {
     createUser, 
     handleLogin, 
     handleLogout,
-    handleRefreshToken
+    handleRefreshToken,
+    getUser,
+    getUsers,
+    updateUserInformations
 } = require('../controllers/UserController');
 const isAuthenticated = require('../middlewares/isAuthenticated');
 
@@ -12,7 +15,10 @@ const isAuthenticated = require('../middlewares/isAuthenticated');
 router.post('/register', createUser);
 router.post('/login', handleLogin);
 router.post('/logout', handleLogout);
-router.get('/refresh', handleRefreshToken)
+router.post('/refresh', handleRefreshToken)
+router.get('/user/:id', getUser);
+router.get('/users', getUsers);
+router.put('/updateuser', isAuthenticated, updateUserInformations);
 router.get('/test', isAuthenticated, (req, res) => {
     res.send({"Message": "Authenticated and able to see this"})
 })

@@ -55,6 +55,29 @@ let createUser = async (req, res) =>{
   
 }
 
+const getUser = async (req, res) => {
+  const user = await User.findOne({ _id: req.params.id })
+  .populate('garage')
+  .exec();
+  if(!user){
+    res.status(404).send({'message': 'User not found !'});
+  } else {
+    res.status(200).send(user);
+  }
+}
+
+const getUsers = async (req, res) => {
+  const users = await User.find({})
+  .populate('garage')
+  .exec();
+  if(!users){
+    res.status(404).send({'message': 'Users not found !'});
+  } else {
+    res.status(200).send(users);
+  }
+}
+
+
 
 const handleLogin = async (req, res) => {
   const { email, password } = req.body;
@@ -116,7 +139,7 @@ const handleLogout = async (req, res) => {
 }
 
 const handleRefreshToken = async (req, res) => {
-  
+  console.log(req.body.refreshToken);
   const refreshToken = req.body.refreshToken;
   if (!refreshToken) return res.sendStatus(401);
   const foundUser = await User.findOne({ refreshToken }).exec();
@@ -143,10 +166,23 @@ const handleRefreshToken = async (req, res) => {
 }
 
 
+const updateUserInformations = (req, res) => {
+  User.findOneAndUpdate({ _id: req.user }, req.body, { new: true }, (err, doc) => {
+    if (!err) {
+      res.send(doc);
+    } else {
+      console.log('Error in User Update :' + JSON.stringify(err, undefined, 2));
+    }
+  });
+}
+
   
 module.exports = {
   createUser,
   handleLogin,
   handleLogout,
-  handleRefreshToken
+  handleRefreshToken,
+  getUser,
+  getUsers,
+  updateUserInformations,
 };
