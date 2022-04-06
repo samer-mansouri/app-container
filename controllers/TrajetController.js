@@ -58,6 +58,30 @@ const trajetsSimpleSearch = (req, res) => {
     })
 }
 
+const detailledSearch = (req, res) => {
+    const { placeOfDeparture, placeOfDestination, departureTime, pathTaken, userGender } = req.body;
+    Trajet.find({
+        placeOfDeparture: placeOfDeparture,
+        placeOfDestination: placeOfDestination,
+        departureTime: departureTime,
+        pathTaken: pathTaken,
+    }).populate("user", "firstName lastName picture gender").sort('-createdAt').exec((err, docs) => {
+        if (!err) {
+            if(docs.length > 0){
+                
+                const filteredDocs = docs.filter(doc => doc.user.gender != userGender)
+                res.status(200).send(filteredDocs);
+            } else {
+                res.status(200).send(docs);
+            }
+                
+            
+        } else {
+            console.log(err);
+            res.status(500).send({"Error": "Internal Server Error"})
+        }
+    })
+}
 
 const createTrajet = async (req, res) => {
     const userId = req.user;
@@ -148,4 +172,5 @@ module.exports = {
     createTrajet,
     updateTrajet,
     deleteTrajet,
+    detailledSearch,
 }

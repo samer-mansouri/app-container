@@ -110,7 +110,7 @@ const handleLogin = async (req, res) => {
         foundUser.refreshToken = refreshToken;
         const result = await foundUser.save();
 
-        res.json({ refreshToken, accessToken });
+        res.json({ refreshToken, accessToken, currentUser: foundUser._id });
     } else {
         res.sendStatus(401);
     }
@@ -175,6 +175,7 @@ const updateUserInformations = (req, res) => {
     }
   });
 }
+
 
   
 module.exports = {

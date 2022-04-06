@@ -18,7 +18,7 @@ const vehiculeDetails = (req, res) => {
 
 const userVehiculesList = (req, res) => {
     const userId = req.user;
-    Vehicule.find({ userId }, (err, doc) => {
+    Vehicule.find({ userId }).sort('-createdAt').exec((err, doc) => {
         if (!err) {
             res.status(200).send(doc);
         } else {
@@ -42,13 +42,14 @@ const createVehicule = async (req, res) => {
         power,
     ).save((err, doc) => {
         if (!err) {
-            res.status(201).send({ 'message': 'Vehicule created with success !' });
+            res.status(201).send(doc);
         } else {
             console.log(err);
             res.status(500).send({"Error": "Internal Server Error"})
         }
     })
 }
+
 
 const deleteVehicule = (req, res) => {
     const userId = req.user;
@@ -77,7 +78,7 @@ const updateVehicule = (req, res) => {
         power,
     }, (err, doc) => {
         if (!err) {
-            res.status(200).send({ 'message': 'Vehicule updated with success !' });
+            res.status(200).send(doc);
         } else {
             console.log(err);
             res.status(500).send({"Error": "Internal Server Error"})
