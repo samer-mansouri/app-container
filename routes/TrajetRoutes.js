@@ -9,10 +9,11 @@ const {
     updateTrajet,
     deleteTrajet,
     detailledSearch,
+    getTrajtesWithUserReservationStatus
 } = require('../controllers/TrajetController');
 const isAuthenticated = require('../middlewares/isAuthenticated');
 
-router.get('/trajets', getAllTrajets);
+router.get('/trajets', isAuthenticated, getAllTrajets);
 router.get('/trajet/:id', getTrajet);
 router.post('/trajets/search', isAuthenticated,trajetsSimpleSearch);
 router.post('/trajet', isAuthenticated, createTrajet);

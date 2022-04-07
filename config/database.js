@@ -25,3 +25,4 @@ require('../models/Trajet');
 require('../models/Reservation');
 require('../models/Note');
 require('../models/Declaration');
+require('../models/Covoiturage');

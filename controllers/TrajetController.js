@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Trajet = mongoose.model('Trajet');
 const User = mongoose.model('User');
+const Reservation = mongoose.model('Reservation');
 const { initializeTrajet } = require('../helpers/TrajetHelpers');
 
 const getAllTrajets = (req, res) => {
@@ -14,6 +15,41 @@ const getAllTrajets = (req, res) => {
     })
 }
 
+const getTrajtesWithUserReservationStatus = (req, res) => {
+    const userId = req.user;
+    console.log(req.user)
+    searchQuery = Trajet.find({}).populate("user", "firstName lastName picture").sort('-createdAt');
+    searchQuery.exec((err, docs) => {
+       if(!err){
+        let i = 0;
+        docs = docs.map(doc => {
+            let query = Reservation.find({  userId , trajetId: doc._id }) 
+            query.exec((err, d) =>{
+                if(!err){
+                    if(d.length > 0){
+                        doc.set("reservationStatus", d[0].status, {strict: false});
+                    } else {
+                        doc.set("reservationStatus", "none", {strict: false});
+                    }
+                    if(i == docs.length){
+                        res.status(200).send(docs);
+                    }
+                } else {
+                    console.log(err);
+                    res.status(500).send({"Error": "Internal Server Error"})
+                }
+            })
+            i++;
+
+                return doc;
+            
+        })
+       } else {
+              console.log(err);
+              res.status(500).send({"Error": "Internal Server Error"})
+       }
+    })
+}
 
 getAllTrajetsWithPagination = (req, res) => {
     const { page, limit } = req.query;
@@ -173,4 +209,5 @@ module.exports = {
     updateTrajet,
     deleteTrajet,
     detailledSearch,
+    getTrajtesWithUserReservationStatus
 }
