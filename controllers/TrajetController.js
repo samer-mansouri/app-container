@@ -65,6 +65,7 @@ getAllTrajetsWithPagination = (req, res) => {
 }
 
 const getTrajet = (req, res) => {
+    console.log(req.user);
     const trajetId = req.params.id;
     Trajet.findOne({ _id: trajetId })
     .populate("user", "firstName lastName picture")
@@ -73,9 +74,11 @@ const getTrajet = (req, res) => {
         doc = JSON.stringify(doc)
         doc = JSON.parse(doc)
         if (!err) {
-            Reservation.findOne({ trajetId: trajetId, userId: req.user }, (err, reservation) => {
+            Reservation.findOne({ trajetId: trajetId, userId: req.user  }, (err, reservation) => {
                 if (!err) {
                     if (reservation) {
+                        console.log(reservation)
+                        console.log(reservation.status);
                         doc.reservationStatus = reservation.status;
                     } else {
                         doc.reservationStatus = false;

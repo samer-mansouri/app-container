@@ -6,20 +6,52 @@ createReservation = async (req, res) => {
     const userId = req.user;
     const status = "pending";
     const { trajetId } = req.body;
-    await new Reservation({
-        userId,
-        trajetId,
-        status,
-    }).save((err, doc) => {
+    Reservation.find({ trajetId, userId }, (err, doc) => {
         if (!err) {
-            res.status(201).send({ 'message': 'Reservation created with success !' });
+            if (doc.length > 0 && doc[0].status == "pending") {
+                res.status(400).json({
+                    message: "Vous avez déjà une réservation pour ce trajet"
+                });
+            } else if (doc.length > 0 && doc[0].status == "canceled") {
+                Reservation.findByIdAndUpdate(doc[0]._id, { status: "pending" }, (err, doc) => {
+                    if (!err) {
+                        res.status(200).json({
+                            message: "Votre réservation a été réactivée"
+                        });
+                    } else {
+                        res.status(400).json({
+                            message: "Une erreur est survenue"
+                        });
+                    }
+                });
+            } else {
+                const reservation = new Reservation({
+                    userId,
+                    trajetId,
+                    status
+                });
+                reservation.save((err, doc) => {
+                    if (!err) {
+                        res.status(200).json({
+                            message: "Votre réservation a bien été enregistrée"
+                        });
+                    } else {
+                        res.status(400).json({
+                            message: "Une erreur est survenue"
+                        });
+                    }
+                });
+            }
         } else {
-            console.log(err);
-            res.status(500).send({"Error": "Internal Server Error"})
+            console.log(err)
+            res.status(400).json({
+                message: "Une erreur est survenue"
+            });
         }
-    })
-
+    });
 }
+
+
 
 reservationSetStatusConfirmed = async (req, res) => {
     const userId = req.user;
@@ -57,11 +89,11 @@ reservationSetStatusConfirmed = async (req, res) => {
 }
 
 
-reservationSetStatusCancelled = async (req, res) => {
+reservationSetStatusCancelled = (req, res) => {
     const userId = req.user;
-    const reservationId = req.params.id;
-    const status = "cancelled";
-    await Reservation.findOneAndUpdate({ _id: reservationId, userId }, { status }, (err, doc) => {
+    const trajetId = req.params.id;
+    console.log(userId);
+    Reservation.findOneAndUpdate({ trajetId , userId }, { status: "canceled" }, (err, doc) => {
         if (!err) {
             res.status(200).send({ 'message': 'Reservation status to cancelled !' });
         } else {

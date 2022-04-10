@@ -11,6 +11,6 @@ const isAuthenticated = require('../middlewares/isAuthenticated');
 
 router.post('/reservation', isAuthenticated, createReservation);
 router.put('/reservation/:id', isAuthenticated, reservationSetStatusConfirmed);
-router.put('/reservation/:id', isAuthenticated, reservationSetStatusCancelled);
+router.put('/reservationcancel/:id', isAuthenticated, reservationSetStatusCancelled);
 
 module.exports = { router };
