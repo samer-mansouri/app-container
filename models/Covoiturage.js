@@ -33,4 +33,4 @@ CovoiturageSchema.virtual("user", {
 });
 
 CovoiturageSchema.plugin(timestamps);
-mongoose.model("Trajet", TrajetSchema)
+mongoose.model("Covoiturage", CovoiturageSchema)

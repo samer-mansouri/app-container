@@ -52,12 +52,21 @@ const TrajetSchema = new mongoose.Schema({
   }
 });
 TrajetSchema.set('toJSON', { virtuals: true })
+TrajetSchema.set('toObject', { virtuals: true })
 
 TrajetSchema.virtual("user", {
   ref: "User",
   foreignField: "_id",
   localField: "userId"
 });
+
+
+TrajetSchema.virtual("vehicule", {
+  ref: "Vehicule",
+  foreignField: "_id",
+  localField: "vehiculeId"
+});
+
 
 TrajetSchema.plugin(timestamps);
 mongoose.model("Trajet", TrajetSchema)

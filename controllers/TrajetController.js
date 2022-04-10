@@ -16,39 +16,37 @@ const getAllTrajets = (req, res) => {
 }
 
 const getTrajtesWithUserReservationStatus = (req, res) => {
+   
     const userId = req.user;
-    console.log(req.user)
-    searchQuery = Trajet.find({}).populate("user", "firstName lastName picture").sort('-createdAt');
-    searchQuery.exec((err, docs) => {
-       if(!err){
-        let i = 0;
-        docs = docs.map(doc => {
-            let query = Reservation.find({  userId , trajetId: doc._id }) 
-            query.exec((err, d) =>{
-                if(!err){
-                    if(d.length > 0){
-                        doc.set("reservationStatus", d[0].status, {strict: false});
+    Trajet.find({})
+    .select('_id userId placeOfDeparture placeOfDestination departureTime')
+    .populate("user", "firstName lastName picture")
+    .sort('-createdAt').exec((err, docs) => {
+            let len = docs.length;
+            let counter = 0;
+            docs = JSON.stringify(docs)
+            docs = JSON.parse(docs)
+            docs.map((doc) => {
+                Reservation.findOne({ trajetId: doc._id, userId }, (err, reservation) => {
+                    if (!err) {
+                        if (reservation) {
+                            doc.reservationStatus = reservation.status;
+                        } else {
+                            doc.reservationStatus = false;
+                        }
+                        counter++;
+                        if (counter === len) {
+                            res.status(200).send(docs);
+                        }
                     } else {
-                        doc.set("reservationStatus", "none", {strict: false});
+                        console.log(err);
+                        res.status(500).send({"Error": "Internal Server Error"})
                     }
-                    if(i == docs.length){
-                        res.status(200).send(docs);
-                    }
-                } else {
-                    console.log(err);
-                    res.status(500).send({"Error": "Internal Server Error"})
-                }
+                })
             })
-            i++;
-
-                return doc;
-            
-        })
-       } else {
-              console.log(err);
-              res.status(500).send({"Error": "Internal Server Error"})
-       }
+        
     })
+
 }
 
 getAllTrajetsWithPagination = (req, res) => {
@@ -68,9 +66,26 @@ getAllTrajetsWithPagination = (req, res) => {
 
 const getTrajet = (req, res) => {
     const trajetId = req.params.id;
-    Trajet.findOne({ _id: trajetId }, (err, doc) => {
+    Trajet.findOne({ _id: trajetId })
+    .populate("user", "firstName lastName picture")
+    .populate("vehicule")    
+    .exec((err, doc) => {
+        doc = JSON.stringify(doc)
+        doc = JSON.parse(doc)
         if (!err) {
-            res.status(200).send(doc);
+            Reservation.findOne({ trajetId: trajetId, userId: req.user }, (err, reservation) => {
+                if (!err) {
+                    if (reservation) {
+                        doc.reservationStatus = reservation.status;
+                    } else {
+                        doc.reservationStatus = false;
+                    }        
+                     res.status(200).send(doc);
+                } else {
+                    console.log(err);
+                    res.status(500).send({"Error": "Internal Server Error"})
+                }
+            })
         } else {
             console.log(err);
             res.status(500).send({"Error": "Internal Server Error"})

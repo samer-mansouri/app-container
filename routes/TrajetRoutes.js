@@ -19,6 +19,7 @@ router.post('/trajets/search', isAuthenticated,trajetsSimpleSearch);
 router.post('/trajet', isAuthenticated, createTrajet);
 router.put('/trajet/:id', isAuthenticated, updateTrajet);
 router.delete('/trajet/:id', isAuthenticated, deleteTrajet);
-router.post('/trajets/detsearch', isAuthenticated, detailledSearch);  
+router.post('/trajets/detsearch', isAuthenticated, detailledSearch);
+router.get('/trajetsres', isAuthenticated, getTrajtesWithUserReservationStatus);
 
 module.exports = { router };
