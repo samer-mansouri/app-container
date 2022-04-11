@@ -3,12 +3,15 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const cloudinary = require('../config/cloudinary');
 
 
 const { validateUser, initializeUser } = require('../helpers/UserHelpers')
 
 
 let createUser = async (req, res) =>{
+    
+
     console.log(req.body)
     const { error } = validateUser(
       {
@@ -167,15 +170,64 @@ const handleRefreshToken = async (req, res) => {
 
 
 const updateUserInformations = (req, res) => {
-  User.findOneAndUpdate({ _id: req.user }, req.body, { new: true }, (err, doc) => {
-    if (!err) {
-      res.send(doc);
-    } else {
-      console.log('Error in User Update :' + JSON.stringify(err, undefined, 2));
-    }
-  });
+  if (req.body.email) {
+    User.find({ email: req.body.email })
+
+    .then(user => {
+      if (user.length > 0 && user[0]._id != req.user) {
+        res.status(409).send({'message': 'Email already exists !'});
+      } else {
+        User.findByIdAndUpdate(req.user , req.body, { new: true })
+        .then(user => {
+          if (!user) {
+            res.status(404).send({'message': 'User not found !'});
+          } else {
+            res.status(200).send(user);
+          }
+        })
+        .catch(err => {
+          res.status(500).send({'message': 'Error updating user'});
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({'message': 'Error updating user'});
+    });
+  } else {
+
+    User.findOneAndUpdate({ _id: req.user }, req.body, { new: true }, (err, doc) => {
+      if (!err) {
+        res.send(doc);
+      } else {
+        console.log('Error in User Update :' + JSON.stringify(err, undefined, 2));
+      }
+    });
+  }
 }
 
+const updateUserProfilePicture = async (req, res) => {
+  try {
+    const result = await cloudinary.uploader.upload(req.file.path);
+  User.findOneAndUpdate({ _id: req.user }, { picture: result.secure_url }, (err, doc) => {
+    if (!err) {
+      res.send({
+        message: 'User profile picture updated successfully',
+        picture: result.secure_url
+      });
+    } else {
+      res.status(400).send({
+        message: 'User profile picture not updated',
+        error: err
+      });
+    }
+  });
+  } catch (error) {
+    res.status(400).send({
+      message: 'User profile picture not updated',
+      error: error
+    });
+  }
+}
 
   
 module.exports = {
@@ -186,4 +238,5 @@ module.exports = {
   getUser,
   getUsers,
   updateUserInformations,
+  updateUserProfilePicture
 };

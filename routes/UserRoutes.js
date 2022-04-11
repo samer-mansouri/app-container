@@ -7,8 +7,12 @@ const {
     handleRefreshToken,
     getUser,
     getUsers,
-    updateUserInformations
+    updateUserInformations,
+    updateUserProfilePicture,
 } = require('../controllers/UserController');
+
+const { uploadProfilePicture } = require("../config/upload");
+const upload = require("../config/multer");
 const isAuthenticated = require('../middlewares/isAuthenticated');
 
 
@@ -19,6 +23,7 @@ router.post('/refresh', handleRefreshToken)
 router.get('/user/:id', getUser);
 router.get('/users', getUsers);
 router.put('/updateuser', isAuthenticated, updateUserInformations);
+router.put('/uploadprofilepicture', isAuthenticated, upload.single('picture'), updateUserProfilePicture);
 router.get('/test', isAuthenticated, (req, res) => {
     res.send({"Message": "Authenticated and able to see this"})
 })
