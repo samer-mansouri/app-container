@@ -47,7 +47,11 @@ const VehiculeSchema = new mongoose.Schema({
       type: String,
       maxLength: 2,
       required : 'This field is required'
-  }
+  },
+  vehiculePic: {
+      type: String,
+      maxLength: 255,
+  },
 });
 
 VehiculeSchema.plugin(timestamps);

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Vehicule = mongoose.model('Vehicule');
 const { initializeVehicule } = require('../helpers/VehiculeHelpers')
-
+const cloudinary = require('../config/cloudinary');
 
 const vehiculeDetails = (req, res) => {
     const userId = req.user;
@@ -86,10 +86,29 @@ const updateVehicule = (req, res) => {
     })
 }
 
+const addCarPicture = async (req, res) => {
+    const userId = req.user;
+    const vehiculeId = req.params.id;
+    const result = await cloudinary.uploader.upload(req.file.path);
+    Vehicule.findOneAndUpdate({ _id: vehiculeId, userId }, {
+        vehiculePic: result.secure_url
+    }, (err, doc) => {
+        if (!err) {
+            res.status(200).send(doc);
+        } else {
+            console.log(err);
+            res.status(500).send({"Error": "Internal Server Error"})
+        }
+    })
+}
+
+
+
 module.exports = {
     userVehiculesList,
     vehiculeDetails,
     createVehicule,
     updateVehicule,
     deleteVehicule,
+    addCarPicture
 };

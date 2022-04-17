@@ -38,7 +38,6 @@ let createUser = async (req, res) =>{
           req.body.firstName,
            req.body.lastName,
            req.body.dateOfBirth,
-           req.body.picture,
            req.body.address,
            req.body.phoneNumber,           
            req.body.email,
@@ -229,6 +228,30 @@ const updateUserProfilePicture = async (req, res) => {
   }
 }
 
+const updateUserPermisPicture = async (req, res) => {
+  try {
+    const result = await cloudinary.uploader.upload(req.file.path);
+  User.findOneAndUpdate({ _id: req.user }, { permisPic: result.secure_url }, (err, doc) => {
+    if (!err) {
+      res.send({
+        message: 'User permis picture updated successfully',
+        picture: result.secure_url
+      });
+    } else {
+      res.status(400).send({
+        message: 'User permis picture not updated',
+        error: err
+      });
+    }
+  });
+  } catch (error) {
+    res.status(400).send({
+      message: 'User permis picture not updated',
+      error: error
+    });
+  }
+}
+
   
 module.exports = {
   createUser,
@@ -238,5 +261,6 @@ module.exports = {
   getUser,
   getUsers,
   updateUserInformations,
-  updateUserProfilePicture
+  updateUserProfilePicture,
+  updateUserPermisPicture
 };

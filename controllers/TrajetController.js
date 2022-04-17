@@ -161,7 +161,19 @@ const createTrajet = async (req, res) => {
         phoneNumber,
     ).save((err, doc) => {
         if (!err) {
-            res.status(201).send({ 'message': 'Trajet created with success !' });
+            Trajet.findOne({ _id: doc._id })
+            .populate("user", "firstName lastName picture")
+            .exec((err, trajet) => {
+                if (!err) {
+                    res.status(201).send({ 
+                        'message': 'Trajet created with success !',
+                        'trajet': trajet
+                    });
+                } else {
+                    console.log(err);
+                    res.status(500).send({"Error": "Internal Server Error"})
+                }
+            })
         } else {
             console.log(err);
             res.status(500).send({"Error": "Internal Server Error"})
@@ -219,6 +231,21 @@ const deleteTrajet = (req, res) => {
     })
 }
 
+const getCurrentUserTrajets = (req, res) => {
+    const userId = req.user;
+    Trajet.find({ userId })
+    .populate("user", "firstName lastName picture")
+    .populate("vehicule")
+    .exec((err, doc) => {
+        if (!err) {
+            res.status(200).send(doc);
+        } else {
+            console.log(err);
+            res.status(500).send({"Error": "Internal Server Error"})
+        }
+    })
+}
+
 module.exports = {
     getAllTrajets,
     getTrajet,
@@ -227,5 +254,6 @@ module.exports = {
     updateTrajet,
     deleteTrajet,
     detailledSearch,
-    getTrajtesWithUserReservationStatus
+    getTrajtesWithUserReservationStatus,
+    getCurrentUserTrajets
 }

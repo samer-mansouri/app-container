@@ -50,6 +50,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: 'This field is required',
   },
+  permisPic : {
+    type: String,
+    required: 'This field is required',
+  },
   gender : {
     type: String,
     enum: Object.values(Gender),
