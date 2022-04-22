@@ -32,5 +32,7 @@ CovoiturageSchema.virtual("user", {
   localField: "userId"
 });
 
+
+
 CovoiturageSchema.plugin(timestamps);
 mongoose.model("Covoiturage", CovoiturageSchema)

@@ -23,5 +23,11 @@ const ReservationSchema = new mongoose.Schema({
   },
 });
 
+ReservationSchema.virtual("user", {
+  ref: "User",
+  foreignField: "_id",
+  localField: "userId"
+});
+
 ReservationSchema.plugin(timestamps);
 mongoose.model("Reservation", ReservationSchema)

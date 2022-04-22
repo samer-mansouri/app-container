@@ -68,5 +68,12 @@ TrajetSchema.virtual("vehicule", {
 });
 
 
+TrajetSchema.virtual("reservationsNumber", {
+  ref: "Reservation",
+  foreignField: "trajetId",
+  localField: "_id",
+  count: true
+})
+
 TrajetSchema.plugin(timestamps);
 mongoose.model("Trajet", TrajetSchema)

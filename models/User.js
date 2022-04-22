@@ -52,7 +52,6 @@ const UserSchema = new mongoose.Schema({
   },
   permisPic : {
     type: String,
-    required: 'This field is required',
   },
   gender : {
     type: String,

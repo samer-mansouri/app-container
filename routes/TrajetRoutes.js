@@ -10,7 +10,8 @@ const {
     deleteTrajet,
     detailledSearch,
     getTrajtesWithUserReservationStatus,
-    getCurrentUserTrajets
+    getCurrentUserTrajets,
+    getSingleTrajetUsersReservationsList
 } = require('../controllers/TrajetController');
 const isAuthenticated = require('../middlewares/isAuthenticated');
 
@@ -23,5 +24,6 @@ router.put('/trajet/:id', isAuthenticated, updateTrajet);
 router.delete('/trajet/:id', isAuthenticated, deleteTrajet);
 router.post('/trajets/detsearch', isAuthenticated, detailledSearch);
 router.get('/trajetsres', isAuthenticated, getTrajtesWithUserReservationStatus);
+router.get('/trajet/:id/reservations', isAuthenticated, getSingleTrajetUsersReservationsList);
 
 module.exports = { router };

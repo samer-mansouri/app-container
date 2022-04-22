@@ -236,6 +236,22 @@ const getCurrentUserTrajets = (req, res) => {
     Trajet.find({ userId })
     .populate("user", "firstName lastName picture")
     .populate("vehicule")
+    .populate("reservationsNumber")
+    .exec((err, doc) => {
+        if (!err) {
+            res.status(200).send(doc);
+        } else {
+            console.log(err);
+            res.status(500).send({"Error": "Internal Server Error"})
+        }
+    })
+}
+
+const getSingleTrajetUsersReservationsList = (req, res) => {
+    const trajetId = req.params.id;
+    Reservation.find({ trajetId })
+    .populate("user", "firstName lastName picture")
+    .populate("vehicule")
     .exec((err, doc) => {
         if (!err) {
             res.status(200).send(doc);
@@ -255,5 +271,6 @@ module.exports = {
     deleteTrajet,
     detailledSearch,
     getTrajtesWithUserReservationStatus,
-    getCurrentUserTrajets
+    getCurrentUserTrajets,
+    getSingleTrajetUsersReservationsList
 }
