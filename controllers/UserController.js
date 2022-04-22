@@ -38,6 +38,7 @@ let createUser = async (req, res) =>{
           req.body.firstName,
            req.body.lastName,
            req.body.dateOfBirth,
+           req.body.picture,
            req.body.address,
            req.body.phoneNumber,           
            req.body.email,
