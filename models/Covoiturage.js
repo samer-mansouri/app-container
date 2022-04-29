@@ -25,6 +25,7 @@ const CovoiturageSchema = new mongoose.Schema({
 });
 
 CovoiturageSchema.set('toJSON', { virtuals: true })
+CovoiturageSchema.set('toObject', { virtuals: true })
 
 CovoiturageSchema.virtual("user", {
   ref: "User",
