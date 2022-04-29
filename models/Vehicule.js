@@ -54,5 +54,10 @@ const VehiculeSchema = new mongoose.Schema({
   },
 });
 
+VehiculeSchema.pre('remove', function(next) {
+  trajet.remove({vehiculeId: this._id}).exec();
+  next();
+});
+
 VehiculeSchema.plugin(timestamps);
 mongoose.model("Vehicule", VehiculeSchema)

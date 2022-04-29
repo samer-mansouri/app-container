@@ -209,7 +209,20 @@ const updateTrajet = (req, res) => {
         { new: true },
         (err, doc) => {
             if (!err) {
-                res.status(200).send({ 'message': 'Trajet updated with success !' });
+                Trajet.findOne({ _id: trajetId })
+                .populate("reservationsNumber")
+                .exec((err, trajet) => {
+                    if (!err) {
+                        res.status(200).send({ 
+                            'message': 'Trajet updated with success !' ,
+                            'trajet': trajet
+                        });
+                    } else {
+                        console.log(err);
+                        res.status(500).send({"Error": "Internal Server Error"})
+                    }
+                })
+
             } else {
                 console.log(err);
                 res.status(500).send({"Error": "Internal Server Error"})
@@ -223,7 +236,7 @@ const deleteTrajet = (req, res) => {
     const trajetId = req.params.id;
     Trajet.findOneAndDelete({ _id: trajetId, userId }, (err, doc) => {
         if (!err) {
-            res.status(200).send({ 'message': 'Trajet deleted with success !' });
+            res.status(200).send(doc);
         } else {
             console.log(err);
             res.status(500).send({"Error": "Internal Server Error"})
@@ -261,6 +274,8 @@ const getSingleTrajetUsersReservationsList = (req, res) => {
         }
     })
 }
+
+
 
 module.exports = {
     getAllTrajets,

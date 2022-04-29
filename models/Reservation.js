@@ -23,6 +23,10 @@ const ReservationSchema = new mongoose.Schema({
   },
 });
 
+ReservationSchema.set('toJSON', { virtuals: true })
+ReservationSchema.set('toObject', { virtuals: true })
+
+
 ReservationSchema.virtual("user", {
   ref: "User",
   foreignField: "_id",

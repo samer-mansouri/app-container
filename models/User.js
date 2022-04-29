@@ -78,5 +78,13 @@ UserSchema.virtual("garage", {
   localField: "_id"
 });
 
+UserSchema.pre('remove', function(next) {
+  Vehicule.remove({userId: this._id}).exec();
+  Reservation.remove({userId: this._id}).exec();
+  Trajet.remove({userId: this._id}).exec();
+  Covoiturage.remove({userId: this._id}).exec();
+  next();
+});
+
 UserSchema.plugin(timestamps);
 mongoose.model("User", UserSchema)

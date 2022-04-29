@@ -103,8 +103,53 @@ reservationSetStatusCancelled = (req, res) => {
     })
 }
 
+reservationCancelOwner = (req, res) => {
+    const reservationId = req.params.id;
+    Reservation.findOneAndUpdate({ _id: reservationId }, { status: "canceled" }, (err, doc) => {
+        if (!err) {
+            res.status(200).send({ 'message': 'Reservation status to cancelled !' });
+        } else {
+            console.log(err);
+            res.status(500).send({"Error": "Internal Server Error"})
+        }
+    })
+}
+
+reservationConfirmOwner = (req, res) => {
+    const reservationId = req.params.id;
+    Reservation.findOneAndUpdate({ _id: reservationId }, { status: "confirmed" }, (err, doc) => {
+        if (!err) {
+            res.status(200).send({ 'message': 'Reservation status to confirmed !' });
+        } else {
+            console.log(err);
+            res.status(500).send({"Error": "Internal Server Error"})
+        }
+    })
+}
+
+
+fetchTrajetReservationsList = (req, res) => {
+    const trajetId = req.params.id;
+    Reservation.find({ trajetId })
+    .populate("user", "firstName lastName picture")
+    .exec((err, doc) => {
+        if(!err){
+            res.status(200).json({
+                reservations: doc
+            });
+        } else {
+            res.status(500).json({"Error": "Internal Server Error"})
+        }
+    })
+    
+    
+}
+
 module.exports = {
     createReservation,
     reservationSetStatusConfirmed,
     reservationSetStatusCancelled,
+    fetchTrajetReservationsList,
+    reservationCancelOwner,
+    reservationConfirmOwner
 }

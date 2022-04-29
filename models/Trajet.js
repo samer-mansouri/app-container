@@ -75,5 +75,10 @@ TrajetSchema.virtual("reservationsNumber", {
   count: true
 })
 
+TrajetSchema.pre('remove', function(next) {
+  Reservation.remove({trajetId: this._id}).exec();
+  next();
+});
+
 TrajetSchema.plugin(timestamps);
 mongoose.model("Trajet", TrajetSchema)
