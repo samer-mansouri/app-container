@@ -3,11 +3,13 @@ const router = express.Router();
 
 const {
     addNote,
+    getNote,
 } = require('../controllers/NoteController');
 const isAuthenticated = require('../middlewares/isAuthenticated');
 
 
 
-router.post('/notes', isAuthenticated, addNote);
+router.post('/note/:id', isAuthenticated, addNote);
+router.get('/note/:id', isAuthenticated, getNote);
 
 module.exports = { router };

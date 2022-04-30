@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 var timestamps = require('mongoose-timestamp');
 
 const NoteSchema = new mongoose.Schema({
-  userNoted: {
+  sender: { // id of the user who send the note
     type: String,
     required: true
   },
-  userWhoNotes : {
+  receiver : { // id of the user who receive the note
     type: String,
     required: true
   },
