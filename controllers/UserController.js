@@ -7,7 +7,7 @@ const cloudinary = require('../config/cloudinary');
 
 
 const { validateUser, initializeUser } = require('../helpers/UserHelpers')
-
+const profilePicLink = 'https://res.cloudinary.com/daoeyqp1y/image/upload/v1650154718/idat0nakfbvdbiateuw3.png'
 
 let createUser = async (req, res) =>{
     
@@ -38,7 +38,7 @@ let createUser = async (req, res) =>{
           req.body.firstName,
            req.body.lastName,
            req.body.dateOfBirth,
-           req.body.picture,
+           profilePicLink,
            req.body.address,
            req.body.phoneNumber,           
            req.body.email,
