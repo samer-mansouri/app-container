@@ -10,6 +10,7 @@ const {
     updateUserInformations,
     updateUserProfilePicture,
     updateUserPermisPicture,
+    deleteMyAccount
 } = require('../controllers/UserController');
 
 const { uploadProfilePicture } = require("../config/upload");
@@ -26,6 +27,7 @@ router.get('/users', getUsers);
 router.put('/updateuser', isAuthenticated, updateUserInformations);
 router.put('/uploadprofilepicture', isAuthenticated, upload.single('picture'), updateUserProfilePicture);
 router.put('/updateuserpermispic', isAuthenticated, upload.single('picture'), updateUserPermisPicture);
+router.delete('/deleteuser', isAuthenticated, deleteMyAccount);
 router.get('/test', isAuthenticated, (req, res) => {
     res.send({"Message": "Authenticated and able to see this"})
 })

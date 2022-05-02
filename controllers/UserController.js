@@ -88,7 +88,7 @@ const handleLogin = async (req, res) => {
 
   const foundUser = await User.findOne({ email: email }).exec();
   console.log(foundUser)
-  if (!foundUser) return res.sendStatus(401).send({"Error": "User not found"}); //Unauthorized 
+  if (!foundUser) return res.sendStatus(404).send({"Error": "User not found"}); //Unauthorized 
   // evaluate password 
   else {
     const match = await bcrypt.compare(password, foundUser.password);
@@ -253,6 +253,20 @@ const updateUserPermisPicture = async (req, res) => {
   }
 }
 
+
+const deleteMyAccount = async (req, res) => {
+  try {
+    const user = await User.findById(req.user);
+    if (!user) {
+      res.status(404).send({'message': 'User not found !'});
+    } else {
+      await User.findByIdAndDelete(req.user);
+      res.status(200).send({'message': 'User deleted successfully'});
+    }
+  } catch (error) {
+    res.status(500).send({'message': 'Error deleting user'});
+  }
+}
   
 module.exports = {
   createUser,
@@ -263,5 +277,6 @@ module.exports = {
   getUsers,
   updateUserInformations,
   updateUserProfilePicture,
-  updateUserPermisPicture
+  updateUserPermisPicture,
+  deleteMyAccount
 };
