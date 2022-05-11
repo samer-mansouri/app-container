@@ -49,7 +49,11 @@ const TrajetSchema = new mongoose.Schema({
       minLength: 8,
       maxlength: 8,
       required: 'This field is required'
-  }
+  },
+  isConfirmed: {
+      type: Boolean,
+      default: false
+  },
 });
 TrajetSchema.set('toJSON', { virtuals: true })
 TrajetSchema.set('toObject', { virtuals: true })

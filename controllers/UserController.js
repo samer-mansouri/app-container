@@ -99,6 +99,7 @@ const handleLogin = async (req, res) => {
                 "UserInfo": {
                     "email": foundUser.email,
                     "user_id": foundUser._id,
+                    "is_admin": foundUser?.is_admin || false,
                 }
             },
             process.env.ACCESS_TOKEN_SECRET,
@@ -158,6 +159,7 @@ const handleRefreshToken = async (req, res) => {
                 "UserInfo": {
                   "email": foundUser.email,
                   "user_id": foundUser._id,
+                  "is_admin": foundUser?.is_admin || false,
                 }
               },
               process.env.ACCESS_TOKEN_SECRET,

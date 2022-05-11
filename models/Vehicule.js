@@ -52,6 +52,10 @@ const VehiculeSchema = new mongoose.Schema({
       type: String,
       maxLength: 255,
   },
+  isConfirmed: {
+      type: Boolean,
+      default: false
+  }
 });
 
 VehiculeSchema.pre('remove', function(next) {
