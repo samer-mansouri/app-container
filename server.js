@@ -8,6 +8,7 @@ const port = process.env.PORT || API_PORT;
 // server listening 
 
 const UserRoutes = require('./routes/UserRoutes');
+const AdminRoutes = require('./routes/AdminRoutes');
 const VehiculeRoutes = require('./routes/VehiculeRoutes');
 const ReservationRoutes = require('./routes/ReservationRoutes');
 const TrajetRoutes = require('./routes/TrajetRoutes');
@@ -25,4 +26,5 @@ app.use('/',  ReservationRoutes.router);
 app.use('/',  TrajetRoutes.router);
 app.use('/', NoteRoutes.router);
 app.use('/', CovoiturageRoutes.router);
+app.use('/', AdminRoutes.router);
 app.use('/', DeclarationRoutes.router);

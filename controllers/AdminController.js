@@ -1,16 +1,11 @@
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
-const Covoiturage = mongoose.model('Covoiturage');
-const Declaration = mongoose.model('Declaration');
-const Note = mongoose.model('Note');
-const Reservation = mongoose.model('Reservation');
 const Trajet = mongoose.model('Trajet');
 const Vehicule = mongoose.model('Vehicule');
 
 
 const usersList = (req, res) => {
-    User.find({})
-    .exec((err, docs) => {
+    User.find({}, (err, docs) => {
         if (!err) {
             res.status(200).send({
                 'message': 'Users list',

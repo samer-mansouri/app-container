@@ -1,5 +1,6 @@
 const isAdmin = (req, res, next) => {
-    if (req.admin) {
+    console.log("Req.admin == ", req.admin);
+    if (req.admin == true) {
         next();
     } else {
         res.sendStatus(403);

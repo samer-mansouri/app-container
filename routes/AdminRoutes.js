@@ -20,3 +20,5 @@ router.get('/admin_trajets', isAuthenticated, isAdmin, showAllTrajets);
 router.delete('admin_trajets/:id', isAuthenticated, isAdmin, deleteTrajet);
 router.delete('admin_vehicules/:id', isAuthenticated, isAdmin, deleteVehicule);
 router.get('/admin_vehicules', isAuthenticated, isAdmin, vehiculeList);
+
+module.exports = { router };

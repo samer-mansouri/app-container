@@ -99,7 +99,7 @@ const handleLogin = async (req, res) => {
                 "UserInfo": {
                     "email": foundUser.email,
                     "user_id": foundUser._id,
-                    "is_admin": foundUser?.is_admin || false,
+                    "isAdmin": foundUser?.isAdmin,
                 }
             },
             process.env.ACCESS_TOKEN_SECRET,
@@ -114,7 +114,7 @@ const handleLogin = async (req, res) => {
         foundUser.refreshToken = refreshToken;
         const result = await foundUser.save();
 
-        res.json({ refreshToken, accessToken, currentUser: foundUser._id });
+        res.json({ refreshToken, accessToken, currentUser: foundUser._id, role: foundUser.isAdmin ? 'admin' : 'user' });
     } else {
         res.sendStatus(401);
     }
@@ -159,7 +159,7 @@ const handleRefreshToken = async (req, res) => {
                 "UserInfo": {
                   "email": foundUser.email,
                   "user_id": foundUser._id,
-                  "is_admin": foundUser?.is_admin || false,
+                  "isAdmin": foundUser?.isAdmin,
                 }
               },
               process.env.ACCESS_TOKEN_SECRET,
