@@ -6,6 +6,11 @@ const Gender = Object.freeze({
   Female: 'Female',
 });
 
+const Role = Object.freeze({
+  Driver: 'Driver',
+  Passenger: 'Passenger',
+});
+
 
 const UserSchema = new mongoose.Schema({
   firstName : {
@@ -72,6 +77,10 @@ const UserSchema = new mongoose.Schema({
     default: false
   },
   refreshToken: String,
+  role: {
+    type: String,
+    enum: Object.values(Role),
+  },
 });
 
 UserSchema.set('toJSON', { virtuals: true })

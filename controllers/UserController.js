@@ -44,6 +44,7 @@ let createUser = async (req, res) =>{
            req.body.email,
            req.body.permis,
            req.body.gender,
+           req.body.role,
            hash)
         .save((err, doc) => {
           if(!err){
@@ -100,6 +101,7 @@ const handleLogin = async (req, res) => {
                     "email": foundUser.email,
                     "user_id": foundUser._id,
                     "isAdmin": foundUser?.isAdmin,
+                    "role": foundUser?.role,
                 }
             },
             process.env.ACCESS_TOKEN_SECRET,
@@ -114,7 +116,7 @@ const handleLogin = async (req, res) => {
         foundUser.refreshToken = refreshToken;
         const result = await foundUser.save();
 
-        res.json({ refreshToken, accessToken, currentUser: foundUser._id, role: foundUser.isAdmin ? 'admin' : 'user' });
+        res.json({ refreshToken, accessToken, currentUser: foundUser._id, role: foundUser.isAdmin ? 'admin' : foundUser.role });
     } else {
         res.sendStatus(401);
     }
@@ -160,6 +162,7 @@ const handleRefreshToken = async (req, res) => {
                   "email": foundUser.email,
                   "user_id": foundUser._id,
                   "isAdmin": foundUser?.isAdmin,
+                  "role": foundUser?.role,
                 }
               },
               process.env.ACCESS_TOKEN_SECRET,
