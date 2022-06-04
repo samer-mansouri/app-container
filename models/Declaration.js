@@ -17,5 +17,16 @@ const DeclarationSchema = new mongoose.Schema({
   },
 });
 
+
+DeclarationSchema.set('toJSON', { virtuals: true })
+DeclarationSchema.set('toObject', { virtuals: true })
+
+DeclarationSchema.virtual("user", {
+  ref: "User",
+  foreignField: "_id",
+  localField: "userId"
+});
+
+
 DeclarationSchema.plugin(timestamps);
 mongoose.model("Declaration", DeclarationSchema)
