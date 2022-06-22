@@ -15,7 +15,7 @@ const {
 } = require('../controllers/TrajetController');
 const isAuthenticated = require('../middlewares/isAuthenticated');
 
-router.get('/trajets', isAuthenticated, getAllTrajets);
+router.get('/trajets', getAllTrajets);
 router.get('/trajet/:id', isAuthenticated,getTrajet);
 router.get('/mytrajets', isAuthenticated, getCurrentUserTrajets);
 router.post('/trajets/search', isAuthenticated,trajetsSimpleSearch);

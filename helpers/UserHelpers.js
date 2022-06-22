@@ -37,7 +37,7 @@ function validateUser(user) {
 
 
 const initializeUser = (
-  firstName, lastName, dateOfBirth, picture, address, phoneNumber, email, permis, gender, password, role
+  firstName, lastName, dateOfBirth, picture, address, phoneNumber, email, permis, gender, role, password 
 ) => {
   let user = new User()
   user.firstName = firstName;

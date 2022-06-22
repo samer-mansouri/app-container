@@ -29,6 +29,6 @@ router.post('/admin_users/:id', isAuthenticated, isAdmin, approuveUser);
 router.post('/admin_vehicules/:id', isAuthenticated, isAdmin, confirmVehicule);
 router.post('/admin_trajets/:id', isAuthenticated, isAdmin, confirmTrajet);
 router.get('/admin_declarations', isAuthenticated, isAdmin, getDeclarations);
-router.delete('/admin_declarations/:id', isAuthenticated, isAdmin, deleteDeclaration);
+router.delete('/admin_declarations/:id', isAuthenticated, isAdmin, deleteDeclaration);  
 
 module.exports = { router };
